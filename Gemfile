@@ -18,4 +18,5 @@ group :test do
   gem 'autotest'
   gem 'autotest-rails-pure'
   gem 'autotest-growl'
+  gem 'factory_girl_rails'
 end
