@@ -51,6 +51,26 @@ describe UsersController do
       get :new
       response.should have_selector("title", :content => "Sign up")
     end
+
+    it "should have a name field" do
+      get :new
+      response.should have_selector("input[name='user[name]'][type='text']")
+    end
+
+    it "should have an email field" do
+      get :new
+      response.should have_selector("input[name='user[email]'][type='text']")
+    end
+
+    it "should have a password field" do
+      get :new
+      response.should have_selector("input[name='user[password]'][type='password']")
+    end
+
+    it "should have a password_confirmation field" do
+      get :new
+      response.should have_selector("input[name='user[password_confirmation]'][type='password']")
+    end
   end
 
   describe "POST 'create'" do
@@ -76,6 +96,13 @@ describe UsersController do
         lambda do
           post :create, :user => @attr
         end.should_not change(User, :count)
+      end
+
+      it "should clear the passwords user" do
+        user_with_invalid_password = @attr.merge(:password => "foobar", :password_confirmation => "foobar123")
+        post :create, :user => user_with_invalid_password
+        assigns(:user).password.should == ""
+        assigns(:user).password_confirmation.should == ""
       end
     end
 
